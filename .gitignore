@@ -1,0 +1,16 @@
+__pycache__/
+*.pyc
+.venv/
+venv/
+.env
+.idea/
+.vscode/
+.pytest_cache/
+dist/
+build/
+*.egg-info/
+
+workspace/*
+!workspace/.gitkeep
+
+src/file_manager/users/users.json
