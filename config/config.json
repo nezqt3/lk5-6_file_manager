@@ -1,0 +1,8 @@
+{
+  "root_dir": "workspace",
+  "users_file": "src/file_manager/users/users.json",
+  "default_user": "default",
+  "disk_quota_mb": 50,
+  "max_file_size_mb": 5,
+  "allow_archives": true
+}
