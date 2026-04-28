@@ -1,3 +1,4 @@
+import argparse
 from pathlib import Path
 
 from file_manager.commands.command_parser import CommandParser
@@ -27,13 +28,23 @@ def build_app() -> tuple[CommandParser, str]:
         if max_file_size_mb is None
         else int(max_file_size_mb * 1024 * 1024),
     )
-    parser = CommandParser(manager, user_manager, allow_archives=config.get("allow_archives", True))
+    parser = CommandParser(
+        manager,
+        user_manager,
+        allow_archives=config.get("allow_archives", True),
+        disk_quota_bytes=None if quota_mb is None else int(quota_mb * 1024 * 1024),
+        max_file_size_bytes=None
+        if max_file_size_mb is None
+        else int(max_file_size_mb * 1024 * 1024),
+    )
+    parser.current_user = default_user
     return parser, "."
 
 
-def main() -> None:
+def run_cli() -> None:
     parser, current_dir = build_app()
-    print("File manager started. Type 'help' to see commands.")
+    print("File manager started in CLI mode.")
+    print("Type 'help' to see commands or run 'python -m file_manager.main --tui' for the pseudo-graphic interface.")
 
     while True:
         try:
@@ -53,6 +64,21 @@ def main() -> None:
 
         except Exception as error:
             print(f"Error: {error}")
+
+
+def main() -> None:
+    arg_parser = argparse.ArgumentParser(description="Educational file manager")
+    arg_parser.add_argument("--tui", action="store_true", help="Run the pseudo-graphic Textual interface")
+    args = arg_parser.parse_args()
+
+    if args.tui:
+        from file_manager.ui.app import FileManagerApp
+
+        app = FileManagerApp()
+        app.run()
+        return
+
+    run_cli()
 
 
 if __name__ == "__main__":

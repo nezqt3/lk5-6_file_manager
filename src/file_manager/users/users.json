@@ -1,0 +1,25 @@
+{
+  "users": {
+    "default": {
+      "home": "/Users/denisalekseenko/Documents/Финашка/Практикум по программированию/2 семестр/5-6. Файловый менеджер/workspace/default"
+    },
+    "student2": {
+      "home": "/Users/denisalekseenko/Documents/Финашка/Практикум по программированию/2 семестр/5-6. Файловый менеджер/workspace/student2"
+    },
+    "demo_user": {
+      "home": "/Users/denisalekseenko/Documents/Финашка/Практикум по программированию/2 семестр/5-6. Файловый менеджер/workspace/demo_user"
+    },
+    "extra_user": {
+      "home": "/Users/denisalekseenko/Documents/Финашка/Практикум по программированию/2 семестр/5-6. Файловый менеджер/workspace/extra_user"
+    },
+    "report_author": {
+      "home": "/Users/denisalekseenko/Documents/Финашка/Практикум по программированию/2 семестр/5-6. Файловый менеджер/workspace/report_author"
+    },
+    "report_archive": {
+      "home": "/Users/denisalekseenko/Documents/Финашка/Практикум по программированию/2 семестр/5-6. Файловый менеджер/workspace/report_archive"
+    },
+    "report_verify": {
+      "home": "/Users/denisalekseenko/Documents/Финашка/Практикум по программированию/2 семестр/5-6. Файловый менеджер/workspace/report_verify"
+    }
+  }
+}

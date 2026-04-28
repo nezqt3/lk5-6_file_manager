@@ -6,8 +6,8 @@ class FilePanel(Static):
     def __init__(self, title: str, **kwargs):
         super().__init__(**kwargs)
         self.title = title
-        self.current_path = "/"
-        self.files = []
+        self.current_path = "."
+        self.files: list[str] = []
 
     def compose(self) -> ComposeResult:
         yield Label(f"{self.title}: {self.current_path}", id="panel-title")
@@ -36,27 +36,17 @@ class FilePanel(Static):
                 ListItem(Label(file_name))
             )
 
-    def load_demo_files(self) -> None:
-        demo_files = [
-            "[DIR] documents",
-            "[DIR] images",
-            "[DIR] projects",
-            "notes.txt",
-            "main.py",
-            "archive.zip",
-        ]
+        if files:
+            self.file_list.index = 0
 
-        self.set_files(demo_files)
+    def focus_list(self) -> None:
+        self.file_list.focus()
 
-    def refresh_files(self) -> None:
-        # TODO: здесь потом вызываешь свою функцию получения файлов
-        self.set_files(self.files)
-
-    def get_selected_item(self) -> str:
+    def get_selected_item(self) -> str | None:
         if self.file_list.index is None:
-            return "nothing selected"
+            return None
 
         if not self.files:
-            return "empty"
+            return None
 
         return self.files[self.file_list.index]

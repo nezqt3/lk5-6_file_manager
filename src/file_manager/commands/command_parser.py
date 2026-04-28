@@ -15,9 +15,15 @@ from file_manager.commands.file_commands import (
     write_command,
 )
 from file_manager.commands.navigation_commands import cd_command, pwd_command, up_command
-from file_manager.commands.user_commands import register_command, users_command
+from file_manager.commands.user_commands import (
+    login_command,
+    register_command,
+    users_command,
+    whoami_command,
+)
 from file_manager.core.file_manager import FileManager
 from file_manager.users.user_manager import UserManager
+from file_manager.utils.helpers import format_size
 
 
 @dataclass
@@ -28,10 +34,21 @@ class CommandResult:
 
 
 class CommandParser:
-    def __init__(self, manager: FileManager, user_manager: UserManager, allow_archives: bool = True):
+    def __init__(
+        self,
+        manager: FileManager,
+        user_manager: UserManager,
+        allow_archives: bool = True,
+        *,
+        disk_quota_bytes: int | None = None,
+        max_file_size_bytes: int | None = None,
+    ):
         self.manager = manager
         self.user_manager = user_manager
         self.allow_archives = allow_archives
+        self.disk_quota_bytes = disk_quota_bytes
+        self.max_file_size_bytes = max_file_size_bytes
+        self.current_user = "default"
 
     def execute(self, raw_command: str, current_dir: str) -> CommandResult:
         parts = shlex.split(raw_command)
@@ -81,6 +98,25 @@ class CommandParser:
             return CommandResult(message=register_command(self.user_manager, args))
         if command == "users":
             return CommandResult(message=users_command(self.user_manager, args))
+        if command == "login":
+            username, message = login_command(self.user_manager, args)
+            self.manager = FileManager(
+                self.user_manager.get_user_home(username),
+                disk_quota_bytes=self.disk_quota_bytes,
+                max_file_size_bytes=self.max_file_size_bytes,
+            )
+            self.current_user = username
+            return CommandResult(message=message, current_dir=".")
+        if command == "whoami":
+            return CommandResult(message=whoami_command(self.current_user, args))
+        if command == "quota":
+            if args:
+                raise ValueError("Usage: quota")
+            usage = format_size(self.manager.get_quota_usage())
+            limit = self.manager.get_quota_limit()
+            if limit is None:
+                return CommandResult(message=f"Quota usage: {usage} / unlimited")
+            return CommandResult(message=f"Quota usage: {usage} / {format_size(limit)}")
 
         if command == "zip":
             if not self.allow_archives:
@@ -114,7 +150,10 @@ class CommandParser:
                 "zip <source> <archive_name>",
                 "unzip <archive_name> <target_dir>",
                 "register <username>",
+                "login <username>",
                 "users",
+                "whoami",
+                "quota",
                 "exit",
             ]
         )

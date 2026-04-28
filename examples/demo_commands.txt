@@ -1,0 +1,21 @@
+help
+pwd
+mkdir docs
+cd docs
+touch notes.txt
+write notes.txt "Hello from file manager"
+read notes.txt
+copy notes.txt notes_copy.txt
+rename notes_copy.txt draft.txt
+ls
+up
+zip docs docs.zip
+mkdir unpacked
+unzip docs.zip unpacked
+register student2
+users
+login student2
+whoami
+quota
+pwd
+exit

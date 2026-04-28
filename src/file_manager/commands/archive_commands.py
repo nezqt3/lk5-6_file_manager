@@ -31,6 +31,13 @@ def unzip_command(manager: FileManager, current_dir: str, args: list[str]) -> st
     target.mkdir(parents=True, exist_ok=True)
 
     with zipfile.ZipFile(archive, "r") as zip_file:
-        zip_file.extractall(target)
+        for member in zip_file.infolist():
+            destination = manager.resolve_path(target / member.filename)
+            if member.is_dir():
+                destination.mkdir(parents=True, exist_ok=True)
+                continue
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            with zip_file.open(member) as source, destination.open("wb") as output:
+                output.write(source.read())
 
     return f"Archive extracted to: {manager.get_relative_path(target)}"

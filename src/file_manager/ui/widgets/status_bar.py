@@ -11,3 +11,6 @@ class StatusBar(Static):
 
     def set_message(self, message: str) -> None:
         self.status_message.update(message)
+
+    def set_context(self, user: str, current_path: str, quota_message: str) -> None:
+        self.set_message(f"User: {user} | Path: {current_path} | {quota_message}")

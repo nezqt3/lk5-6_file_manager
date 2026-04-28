@@ -12,6 +12,8 @@ def pwd_command(manager: FileManager, current_dir: str, args: list[str]) -> str:
 def cd_command(manager: FileManager, current_dir: str, args: list[str]) -> tuple[str, str]:
     if len(args) != 1:
         raise ValueError("Usage: cd <path>")
+    if args[0] == ".." and current_dir == ".":
+        return ".", "Current directory: ."
     target = manager.change_directory(current_dir, args[0])
     relative = manager.get_relative_path(target)
     return relative, f"Current directory: {relative}"
